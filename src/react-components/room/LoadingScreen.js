@@ -9,16 +9,16 @@ export function LoadingScreen({ message, infoMessages }) {
     <LoadingScreenLayout
       center={
         <>
-          <Spinner />
+          {/* <Spinner /> */}
           <p>{message}</p>
         </>
       }
-      bottom={
-        <>
-          <h3>{infoMessage.heading}</h3>
-          <p>{infoMessage.message}</p>
-        </>
-      }
+      // bottom={
+      //   <>
+      //     <h3>{infoMessage.heading}</h3>
+      //     <p>{infoMessage.message}</p>
+      //   </>
+      // }
     />
   );
 }
