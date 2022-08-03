@@ -73,31 +73,31 @@ const getTs = (() => {
     });
   });
 
-  step.text = "Building Admin Console.";
+  // step.text = "Building Admin Console.";
 
-  await new Promise((resolve, reject) => {
-    exec("npm ci", { cwd: "./admin" }, err => {
-      if (err) reject(err);
-      resolve();
-    });
-  });
+  // await new Promise((resolve, reject) => {
+  //   exec("npm ci", { cwd: "./admin" }, err => {
+  //     if (err) reject(err);
+  //     resolve();
+  //   });
+  // });
 
-  await new Promise((resolve, reject) => {
-    exec("npm run build", { cwd: "./admin", env }, err => {
-      if (err) reject(err);
-      resolve();
-    });
-  });
+  // await new Promise((resolve, reject) => {
+  //   exec("npm run build", { cwd: "./admin", env }, err => {
+  //     if (err) reject(err);
+  //     resolve();
+  //   });
+  // });
 
-  await new Promise(res => {
-    copy("./admin/dist", "./dist", err => {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-      res();
-    });
-  });
+  // await new Promise(res => {
+  //   copy("./admin/dist", "./dist", err => {
+  //     if (err) {
+  //       console.error(err);
+  //       process.exit(1);
+  //     }
+  //     res();
+  //   });
+  // });
   step.text = "Preparing Deploy.";
 
   step.text = "Packaging Build.";
