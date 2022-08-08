@@ -14,6 +14,7 @@ import { FullscreenLayout } from "../layout/FullscreenLayout";
 import { Button } from "../input/Button";
 import { Column } from "../layout/Column";
 import { MediaGrid } from "./MediaGrid";
+import ReadyPlayerMe from "./ReadyPlayerMe";
 
 const navTitleMessages = defineMessages({
   youtube: { id: "media-browser.nav_title.youtube", defaultMessage: "YouTube" },
@@ -27,6 +28,9 @@ const navTitleMessages = defineMessages({
 });
 
 export function MediaBrowser({
+  createAvatar,
+  store,
+  scene,
   onClose,
   browserRef,
   searchInputRef,
@@ -52,6 +56,7 @@ export function MediaBrowser({
   children
 }) {
   const intl = useIntl();
+  console.log("createAvatar", createAvatar);
 
   return (
     <FullscreenLayout
@@ -90,7 +95,7 @@ export function MediaBrowser({
       }
       headerRight={headerRight}
     >
-      {mediaSources && (
+      {/* {mediaSources && (
         <div className={styles.buttonNav}>
           {mediaSources.map(source => (
             <Button
@@ -103,7 +108,7 @@ export function MediaBrowser({
             </Button>
           ))}
         </div>
-      )}
+      )} */}
       {facets && (
         <div className={classNames(styles.buttonNav, styles.facetsNav)}>
           {facets.map((facet, i) => (
@@ -120,6 +125,8 @@ export function MediaBrowser({
       )}
       <div className={styles.content}>
         <Column grow ref={browserRef}>
+        {createAvatar && <ReadyPlayerMe store={store} scene={scene} onClose={onClose} />}
+
           {children ? (
             <MediaGrid
               isVariableWidth={selectedSource === "gifs" || selectedSource === "images"}
@@ -169,7 +176,9 @@ MediaBrowser.propTypes = {
   onNextPage: PropTypes.func,
   onPreviousPage: PropTypes.func,
   noResultsMessage: PropTypes.node,
-  children: PropTypes.node
+  children: PropTypes.node,
+  children: PropTypes.node,
+  createAvatar: PropTypes.bool
 };
 
 MediaBrowser.defaultProps = {

@@ -30,31 +30,32 @@ const PRIVACY_POLICY_LINKS = {
 };
 
 const DEFAULT_FACETS = {
-  sketchfab: [
-    { text: "Featured", params: { filter: "featured" } },
-    { text: "Animals", params: { filter: "animals-pets" } },
-    { text: "Architecture", params: { filter: "architecture" } },
-    { text: "Art", params: { filter: "art-abstract" } },
-    { text: "Vehicles", params: { filter: "cars-vehicles" } },
-    { text: "Characters", params: { filter: "characters-creatures" } },
-    { text: "Culture", params: { filter: "cultural-heritage-history" } },
-    { text: "Gadgets", params: { filter: "electronics-gadgets" } },
-    { text: "Fashion", params: { filter: "fashion-style" } },
-    { text: "Food", params: { filter: "food-drink" } },
-    { text: "Furniture", params: { filter: "furniture-home" } },
-    { text: "Music", params: { filter: "music" } },
-    { text: "Nature", params: { filter: "nature-plants" } },
-    { text: "News", params: { filter: "news-politics" } },
-    { text: "People", params: { filter: "people" } },
-    { text: "Places", params: { filter: "places-travel" } },
-    { text: "Science", params: { filter: "science-technology" } },
-    { text: "Sports", params: { filter: "sports-fitness" } },
-    { text: "Weapons", params: { filter: "weapons-military" } }
-  ],
+  // sketchfab: [
+  //   { text: "Featured", params: { filter: "featured" } },
+  //   { text: "Animals", params: { filter: "animals-pets" } },
+  //   { text: "Architecture", params: { filter: "architecture" } },
+  //   { text: "Art", params: { filter: "art-abstract" } },
+  //   { text: "Vehicles", params: { filter: "cars-vehicles" } },
+  //   { text: "Characters", params: { filter: "characters-creatures" } },
+  //   { text: "Culture", params: { filter: "cultural-heritage-history" } },
+  //   { text: "Gadgets", params: { filter: "electronics-gadgets" } },
+  //   { text: "Fashion", params: { filter: "fashion-style" } },
+  //   { text: "Food", params: { filter: "food-drink" } },
+  //   { text: "Furniture", params: { filter: "furniture-home" } },
+  //   { text: "Music", params: { filter: "music" } },
+  //   { text: "Nature", params: { filter: "nature-plants" } },
+  //   { text: "News", params: { filter: "news-politics" } },
+  //   { text: "People", params: { filter: "people" } },
+  //   { text: "Places", params: { filter: "places-travel" } },
+  //   { text: "Science", params: { filter: "science-technology" } },
+  //   { text: "Sports", params: { filter: "sports-fitness" } },
+  //   { text: "Weapons", params: { filter: "weapons-military" } }
+  // ],
   avatars: [
-    { text: "Featured", params: { filter: "featured" } },
+    // { text: "Featured", params: { filter: "featured" } },
     { text: "My Avatars", params: { filter: "my-avatars" } },
-    { text: "Newest", params: { filter: "" } }
+    // { text: "Newest", params: { filter: "" } }
+    { text: "Create Avatar", params: { filter: "create-avatar" }, RPMavatar: true }
   ],
   favorites: [],
   scenes: [{ text: "Featured", params: { filter: "featured" } }, { text: "My Scenes", params: { filter: "my-scenes" } }]
@@ -143,7 +144,14 @@ class MediaBrowserContainer extends Component {
     store: PropTypes.object.isRequired
   };
 
-  state = { query: "", facets: [], showNav: true, selectNextResult: false, clearStashedQueryOnClose: false };
+  state = {
+    query: "",
+    facets: [],
+    showNav: true,
+    selectNextResult: false,
+    clearStashedQueryOnClose: false,
+    createRPMAvatar: false
+  };
 
   constructor(props) {
     super(props);
@@ -253,6 +261,17 @@ class MediaBrowserContainer extends Component {
   };
 
   handleFacetClicked = facet => {
+    if (facet.RPMavatar) {
+      console.log("createRPMAvatar");
+      this.setState({ createRPMAvatar: true }, () => {
+        console.log("rpm state set to true", this.state.createRPMAvatar);
+      });
+    } else {
+      this.setState({ createRPMAvatar: false }, () => {
+        console.log("rpm state set to false", this.state.createRPMAvatar);
+      });
+    }
+
     this.setState({ query: "" }, () => {
       const searchParams = this.getSearchClearedSearchParams(true, true, true);
 
@@ -319,24 +338,24 @@ class MediaBrowserContainer extends Component {
     );
   };
 
-  handleCopyScene = async (e, entry) => {
-    e.preventDefault();
+  // handleCopyScene = async (e, entry) => {
+  //   e.preventDefault();
 
-    this.props.performConditionalSignIn(
-      () => this.props.hubChannel.signedIn,
-      async () => {
-        await fetchReticulumAuthenticated("/api/v1/scenes", "POST", {
-          parent_scene_id: entry.id
-        });
-        this.handleFacetClicked({ params: { filter: "my-scenes" } });
-      },
-      SignInMessages.remixScene
-    );
-  };
+  //   this.props.performConditionalSignIn(
+  //     () => this.props.hubChannel.signedIn,
+  //     async () => {
+  //       await fetchReticulumAuthenticated("/api/v1/scenes", "POST", {
+  //         parent_scene_id: entry.id
+  //       });
+  //       this.handleFacetClicked({ params: { filter: "my-scenes" } });
+  //     },
+  //     SignInMessages.remixScene
+  //   );
+  // };
 
-  onCreateAvatar = () => {
-    window.dispatchEvent(new CustomEvent("action_create_avatar"));
-  };
+  // onCreateAvatar = () => {
+  //   window.dispatchEvent(new CustomEvent("action_create_avatar"));
+  // };
 
   processThumbnailUrl = (entry, thumbnailWidth, thumbnailHeight) => {
     if (entry.images.preview.type === "mp4") {
@@ -429,6 +448,9 @@ class MediaBrowserContainer extends Component {
 
     return (
       <MediaBrowser
+        store={this.props.store}
+        scene={this.props.scene}
+        createAvatar={this.state.createRPMAvatar}
         browserRef={r => (this.browserDiv = r)}
         onClose={this.close}
         searchInputRef={r => (this.inputRef = r)}
@@ -485,7 +507,7 @@ class MediaBrowserContainer extends Component {
         entries.length > 0 ||
         !showEmptyStringOnNoResult ? (
           <>
-            {urlSource === "avatars" && (
+            {/* {urlSource === "avatars" && (
               <CreateTile
                 type="avatar"
                 onClick={this.onCreateAvatar}
@@ -508,7 +530,7 @@ class MediaBrowserContainer extends Component {
                     />
                   }
                 />
-              )}
+              )} */}
             {entries.map((entry, idx) => {
               const isAvatar = entry.type === "avatar" || entry.type === "avatar_listing";
               const isScene = entry.type === "scene" || entry.type === "scene_listing";
