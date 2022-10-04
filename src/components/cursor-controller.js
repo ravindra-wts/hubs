@@ -90,7 +90,8 @@ AFRAME.registerComponent("cursor-controller", {
     );
 
     const setCursorScale = () => {
-      this.cursorVisual.scale.setScalar(APP.store.state.preferences["cursorSize"] || 1);
+      this.cursorVisual.scale.setScalar(APP.store.state.preferences["cursorSize"] - 0.5 || 0.5);
+      // console.log("setting cursor size", APP.store.state.preferences["cursorSize"] - 0.5 || 0.5);
       this.cursorVisual.matrixNeedsUpdate = true;
     };
     APP.store.addEventListener("statechanged", setCursorScale);
