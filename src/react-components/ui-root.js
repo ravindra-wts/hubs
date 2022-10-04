@@ -996,8 +996,6 @@ class UIRoot extends Component {
       );
     }
 
-    git remote set-url origin https://ravindra-wts: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@github.com/ravindra-wts/hubs.git
-
     if (this.props.showInterstitialPrompt) return this.renderInterstitialPrompt();
     const qs = new URLSearchParams(location.search);
     const nameFromQueryParam = qs.get("payload");
