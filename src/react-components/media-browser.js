@@ -53,9 +53,9 @@ const DEFAULT_FACETS = {
   // ],
   avatars: [
     // { text: "Featured", params: { filter: "featured" } },
-    { text: "My Avatars", params: { filter: "my-avatars" } },
+    { text: "My Avatars", params: { filter: "my-avatars" } }
     // { text: "Newest", params: { filter: "" } }
-    { text: "Create Avatar", params: { filter: "create-avatar" }, RPMavatar: true }
+    // { text: "Create Avatar", params: { filter: "create-avatar" }, RPMavatar: true }
   ],
   favorites: [],
   scenes: [{ text: "Featured", params: { filter: "featured" } }, { text: "My Scenes", params: { filter: "my-scenes" } }]
@@ -477,13 +477,13 @@ class MediaBrowserContainer extends Component {
         onSelectSource={this.handleSourceClicked}
         activeFilter={activeFilter}
         facets={facets}
-        onSelectFacet={this.handleFacetClicked}
-        searchPlaceholder={
-          searchPlaceholderMessages[urlSource]
-            ? intl.formatMessage(searchPlaceholderMessages[urlSource])
-            : intl.formatMessage(searchPlaceholderMessages.default)
-        }
-        searchDescription={searchDescription}
+        // onSelectFacet={this.handleFacetClicked}
+        // searchPlaceholder={
+        //   searchPlaceholderMessages[urlSource]
+        //     ? intl.formatMessage(searchPlaceholderMessages[urlSource])
+        //     : intl.formatMessage(searchPlaceholderMessages.default)
+        // }
+        // searchDescription={searchDescription}
         headerRight={
           showCustomOption && (
             <IconButton lg onClick={() => handleCustomClicked(urlSource)}>

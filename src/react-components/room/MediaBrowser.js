@@ -75,25 +75,26 @@ export function MediaBrowser({
               </h3>
             </>
           ) : (
-            <TextInputField
-              value={query}
-              onChange={onChangeQuery}
-              autoFocus={autoFocusSearch}
-              ref={searchInputRef}
-              placeholder={searchPlaceholder}
-              onKeyDown={onSearchKeyDown}
-              beforeInput={<SearchIcon className={styles.searchIcon} />}
-              afterInput={
-                <IconButton onClick={onClearSearch}>
-                  <CloseIcon height={16} width={16} />
-                </IconButton>
-              }
-              description={searchDescription}
-            />
+            <></>
+            // <TextInputField
+            //   value={query}
+            //   onChange={onChangeQuery}
+            //   autoFocus={autoFocusSearch}
+            //   ref={searchInputRef}
+            //   placeholder={searchPlaceholder}
+            //   onKeyDown={onSearchKeyDown}
+            //   beforeInput={<SearchIcon className={styles.searchIcon} />}
+            //   afterInput={
+            //     <IconButton onClick={onClearSearch}>
+            //       <CloseIcon height={16} width={16} />
+            //     </IconButton>
+            //   }
+            //   description={searchDescription}
+            // />
           )}
         </>
       }
-      headerRight={headerRight}
+      // headerRight={headerRight}
     >
       {/* {mediaSources && (
         <div className={styles.buttonNav}>
@@ -115,8 +116,9 @@ export function MediaBrowser({
             <Button
               sm
               key={i}
-              preset={activeFilter === facet.params.filter ? "primary" : "transparent"}
-              onClick={() => onSelectFacet(facet)}
+              // preset={activeFilter === facet.params.filter ? "primary" : "transparent"}
+              preset={"primary"}
+              // onClick={() => onSelectFacet(facet)}
             >
               {facet.text}
             </Button>
@@ -125,7 +127,7 @@ export function MediaBrowser({
       )}
       <div className={styles.content}>
         <Column grow ref={browserRef}>
-        {createAvatar && <ReadyPlayerMe store={store} scene={scene} onClose={onClose} />}
+          {createAvatar && <ReadyPlayerMe store={store} scene={scene} onClose={onClose} />}
 
           {children ? (
             <MediaGrid

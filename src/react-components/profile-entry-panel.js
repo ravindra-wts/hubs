@@ -134,7 +134,10 @@ export default class ProfileEntryPanel extends Component {
       },
       onSubmit: this.saveStateAndFinish,
       onClose: this.props.onClose,
-      onBack: this.props.onBack
+      onBack: this.props.onBack,
+      scene: this.scene,
+      store: this.props.store,
+      finished: this.props.finished
     };
 
     if (this.props.containerType === "sidebar") {
