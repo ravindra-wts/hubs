@@ -5,7 +5,7 @@ import { getBox } from "../utils/auto-box-collider";
 import qsTruthy from "../utils/qs_truthy";
 import { isTagged } from "../components/tags";
 import { qsGet } from "../utils/qs_truthy";
-const customFOV = qsGet("fov");
+const customFOV = qsGet("fov") || 40;
 const enableThirdPersonMode = qsTruthy("thirdPerson");
 import { Layers } from "../components/layers";
 

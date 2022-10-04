@@ -651,7 +651,9 @@ module.exports = async (env, argv) => {
           POSTGREST_SERVER: process.env.POSTGREST_SERVER,
           UPLOADS_HOST: process.env.UPLOADS_HOST,
           BASE_ASSETS_PATH: process.env.BASE_ASSETS_PATH,
-          APP_CONFIG: appConfig
+          APP_CONFIG: appConfig,
+          SUPABASE_URL: process.env.SUPABASE_URL,
+          SUPABASE_ANNON_KEY: process.env.SUPABASE_ANNON_KEY
         })
       })
     ]

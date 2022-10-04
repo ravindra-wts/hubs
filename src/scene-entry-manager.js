@@ -25,6 +25,7 @@ import { MediaDevices, MediaDevicesEvents } from "./utils/media-devices-utils";
 import { addComponent, removeEntity } from "bitecs";
 import { MyCameraTool } from "./bit-components";
 import { anyEntityWith } from "./utils/bit-utils";
+import { insertData } from "./react-components/supabaseCRUD";
 
 export default class SceneEntryManager {
   constructor(hubChannel, authChannel, history) {
@@ -57,6 +58,15 @@ export default class SceneEntryManager {
 
   enterScene = async (enterInVR, muteOnEntry) => {
     console.log("Entering scene...");
+    const storeData = this.store;
+    insertData(
+      storeData[Object.getOwnPropertySymbols(storeData)[0]].profile.displayName,
+      storeData[Object.getOwnPropertySymbols(storeData)[0]].profile.avatarId,
+      new Date()
+    );
+
+    console.log(storeData[Object.getOwnPropertySymbols(storeData)[0]].profile.displayName, "Entered in room");
+    // console.log("storeData", storeData);
     document.getElementById("viewing-camera").removeAttribute("scene-preview-camera");
 
     if (isDebug && NAF.connection.adapter.session) {
@@ -106,6 +116,7 @@ export default class SceneEntryManager {
     this.rightCursorController.components["cursor-controller"].enabled = true;
     this.leftCursorController.components["cursor-controller"].enabled = true;
     this._entered = true;
+    sessionStorage.setItem("isEntered", this._entered);
 
     // Delay sending entry event telemetry until VR display is presenting.
     (async () => {

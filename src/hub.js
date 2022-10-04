@@ -206,7 +206,8 @@ const qs = new URLSearchParams(location.search);
 const isMobile = AFRAME.utils.device.isMobile();
 const isMobileVR = AFRAME.utils.device.isMobileVR();
 const isEmbed = window.self !== window.top;
-if (isEmbed && !qs.get("embed_token")) {
+
+if (isEmbed && (!qs.get("embed_token") || !qs.get("payload"))) {
   // Should be covered by X-Frame-Options, but just in case.
   throw new Error("no embed token");
 }
@@ -244,12 +245,68 @@ import { OAuthScreenContainer } from "./react-components/auth/OAuthScreenContain
 import { SignInMessages } from "./react-components/auth/SignInModal";
 import { ThemeProvider } from "./react-components/styles/theme";
 import { LogMessageType } from "./react-components/room/ChatSidebar";
+import { updateData } from "./react-components/supabaseCRUD";
 
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
 NAF.options.syncSource = PHOENIX_RELIABLE_NAF;
 
 let isOAuthModal = false;
+
+const pendingOps = new Set();
+
+const closingCode = async event => {
+  // do something...
+  // console.log("isentered", sessionStorage.getItem("isEntered"));
+  if (sessionStorage.getItem("isEntered")) {
+    let sessionData = sessionStorage.getItem("log-data");
+    console.log("localStorage.getItem", sessionStorage.getItem("log-data"));
+    sessionData = JSON.parse(sessionData);
+    // console.log("logId", logId);
+    // const { data, error } = await updateData(sessionData.log_id);
+    event.returnValue = `Are you sure you want to leave?`;
+    // if (data) {
+    //   console.log("updated data", data);
+    //   return null;
+    // } else {
+    //   console.log("error while updating leaving timestamp", error);
+    //   return false;
+    // }
+  } else {
+    console.log("error while getting data from session", sessionStorage.getItem("isEntered"));
+    return false;
+  }
+};
+
+function addToPendingWork(promise) {
+  console.log("in add ro pending work");
+  pendingOps.add(promise);
+  const cleanup = () => pendingOps.delete(promise);
+  promise.then(cleanup).catch(cleanup);
+}
+
+const uploadBeforeClose = () => {
+  if (sessionStorage.getItem("isEntered")) {
+    let sessionData = sessionStorage.getItem("log-data");
+
+    console.log("localStorage.getItem", sessionStorage.getItem("log-data"));
+    sessionData = JSON.parse(sessionData);
+    const returnedPromise = updateData(sessionData.log_id);
+    addToPendingWork(returnedPromise);
+  } else {
+    console.log("error while getting data from session", sessionStorage.getItem("isEntered"));
+    return false;
+  }
+};
+
+// window.onbeforeunload = closingCode;
+
+window.addEventListener("beforeunload", event => {
+  uploadBeforeClose();
+  if (pendingOps.size) {
+    event.returnValue = "There is pending work. Sure you want to leave?";
+  }
+});
 
 // OAuth popup handler
 // TODO: Replace with a new oauth callback route that has this postMessage script.
@@ -1170,6 +1227,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   events.on(`hub:leave`, ({ meta }) => {
+    console.log("---------------------left the rooom", meta.profile.displayName);
+
     if (APP.hideHubPresenceEvents || hubChannel.presence.list().length > NOISY_OCCUPANT_COUNT) {
       return;
     }
