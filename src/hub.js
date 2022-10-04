@@ -255,28 +255,28 @@ let isOAuthModal = false;
 
 const pendingOps = new Set();
 
-const closingCode = async event => {
-  // do something...
-  // console.log("isentered", sessionStorage.getItem("isEntered"));
-  if (sessionStorage.getItem("isEntered")) {
-    let sessionData = sessionStorage.getItem("log-data");
-    console.log("localStorage.getItem", sessionStorage.getItem("log-data"));
-    sessionData = JSON.parse(sessionData);
-    // console.log("logId", logId);
-    // const { data, error } = await updateData(sessionData.log_id);
-    event.returnValue = `Are you sure you want to leave?`;
-    // if (data) {
-    //   console.log("updated data", data);
-    //   return null;
-    // } else {
-    //   console.log("error while updating leaving timestamp", error);
-    //   return false;
-    // }
-  } else {
-    console.log("error while getting data from session", sessionStorage.getItem("isEntered"));
-    return false;
-  }
-};
+// const closingCode = async event => {
+//   // do something...
+//   // console.log("isentered", sessionStorage.getItem("isEntered"));
+//   if (sessionStorage.getItem("isEntered")) {
+//     let sessionData = sessionStorage.getItem("log-data");
+//     console.log("localStorage.getItem", sessionStorage.getItem("log-data"));
+//     sessionData = JSON.parse(sessionData);
+//     // console.log("logId", logId);
+//     // const { data, error } = await updateData(sessionData.log_id);
+//     event.returnValue = `Are you sure you want to leave?`;
+//     // if (data) {
+//     //   console.log("updated data", data);
+//     //   return null;
+//     // } else {
+//     //   console.log("error while updating leaving timestamp", error);
+//     //   return false;
+//     // }
+//   } else {
+//     console.log("error while getting data from session", sessionStorage.getItem("isEntered"));
+//     return false;
+//   }
+// };
 
 function addToPendingWork(promise) {
   console.log("in add ro pending work");

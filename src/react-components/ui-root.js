@@ -996,8 +996,11 @@ class UIRoot extends Component {
       );
     }
 
-    if (this.props.showInterstitialPrompt) return this.renderInterstitialPrompt();
+    git remote set-url origin https://ravindra-wts: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@github.com/ravindra-wts/hubs.git
 
+    if (this.props.showInterstitialPrompt) return this.renderInterstitialPrompt();
+    const qs = new URLSearchParams(location.search);
+    const nameFromQueryParam = qs.get("payload");
     const entered = this.state.entered;
     const watching = this.state.watching;
     const enteredOrWatching = entered || watching;
@@ -1005,8 +1008,9 @@ class UIRoot extends Component {
     const showAudioDebugPanel = this.props.store.state.preferences.showAudioDebugPanel;
     const displayNameOverride = this.props.hubIsBound
       ? getPresenceProfileForSession(this.props.presences, this.props.sessionId).displayName
-      : null;
-
+      : nameFromQueryParam
+        ? nameFromQueryParam
+        : null;
     const enableSpectateVRButton =
       configs.feature("enable_lobby_ghosts") &&
       isGhost &&
@@ -1038,6 +1042,7 @@ class UIRoot extends Component {
               <ProfileEntryPanel
                 {...props}
                 containerType="modal"
+                onClose={this.closeProfileEntryPanel}
                 displayNameOverride={displayNameOverride}
                 finished={() => {
                   if (this.props.forcedVREntryType) {
